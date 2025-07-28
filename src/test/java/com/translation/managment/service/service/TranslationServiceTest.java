@@ -235,15 +235,16 @@ class TranslationServiceTest {
 
     @Test
     void testExportAllTranslations() throws Exception {
-        when(translationRepository.streamAll()).thenReturn(Stream.of(mockEntity));
+        when(translationRepository.streamByLocaleCode(anyString())).thenReturn(Stream.of(mockEntity));
         when(translationMapper.toDto(mockEntity)).thenReturn(mockDTO);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+        String code = "code";
 
-        translationService.exportAllTranslations(out, objectMapper);
+        translationService.exportAllTranslations(out, objectMapper,code);
 
         String outputJson = out.toString();
         assertTrue(outputJson.contains("key"));

@@ -114,29 +114,29 @@ class TranslationControllerTest {
         Assertions.assertNotNull(result.getBody().getLocale());
     }
 
-//    @Test
-//    void testFindAll_WhenPageIsEmpty_ShouldReturnNoContent() {
-//        Page<TranslationDTO> emptyPage = Page.empty();
-//        when(service.getAllTranslations(any(Pageable.class))).thenReturn(emptyPage);
-//
-//        ResponseEntity<Page<TranslationDTO>> result = translationController.findAll(PageRequest.of(0, 20));
-//
-//        Assertions.assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
-//        Assertions.assertNull(result.getBody());
-//    }
-//
-//    @Test
-//    void testFindAll_WhenPageHasContent_ShouldReturnOk() {
-//        TranslationDTO dto = new TranslationDTO();
-//        Page<TranslationDTO> pageWithData = new PageImpl<>(List.of(dto));
-//        when(service.getAllTranslations(any(Pageable.class))).thenReturn(pageWithData);
-//
-//        ResponseEntity<Page<TranslationDTO>> result = translationController.findAll(PageRequest.of(0, 20));
-//
-//        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
-//        Assertions.assertNotNull(result.getBody());
-//        Assertions.assertEquals(1, result.getBody().getTotalElements());
-//    }
+    @Test
+    void testFindAll_WhenPageIsEmpty_ShouldReturnNoContent() {
+        Page<TranslationDTO> emptyPage = Page.empty();
+        when(service.getAllTranslations(any(Pageable.class))).thenReturn(emptyPage);
+
+        ResponseEntity<Page<TranslationDTO>> result = translationController.findAll(PageRequest.of(0, 20));
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+        Assertions.assertNull(result.getBody());
+    }
+
+    @Test
+    void testFindAll_WhenPageHasContent_ShouldReturnOk() {
+        TranslationDTO dto = new TranslationDTO();
+        Page<TranslationDTO> pageWithData = new PageImpl<>(List.of(dto));
+        when(service.getAllTranslations(any(Pageable.class))).thenReturn(pageWithData);
+
+        ResponseEntity<Page<TranslationDTO>> result = translationController.findAll(PageRequest.of(0, 20));
+
+        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
+        Assertions.assertNotNull(result.getBody());
+        Assertions.assertEquals(1, result.getBody().getTotalElements());
+    }
 
     @Test
     void testSearchTranslations_WhenMatchesFound_ShouldReturnOk() {
@@ -170,14 +170,15 @@ void testExportTranslations() throws IOException {
     ServletOutputStream outputStream = mock(ServletOutputStream.class);
 
     when(response.getOutputStream()).thenReturn(outputStream);
+    String code = "testCode";
 
-    translationController.exportTranslations(response);
+    translationController.exportTranslations(response,code);
 
     verify(response).setContentType(MediaType.APPLICATION_JSON_VALUE);
     verify(response).setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=translations.json");
     verify(response).setHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
 
-    verify(service).exportAllTranslations(outputStream, objectMapper);
+    verify(service).exportAllTranslations(outputStream, objectMapper,code);
 }
 
 

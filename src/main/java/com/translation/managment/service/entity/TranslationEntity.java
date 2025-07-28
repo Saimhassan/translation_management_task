@@ -12,9 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "translations", indexes = {
-        @Index(name = "idx_translation_updated_at", columnList = "updatedAt") // Optional but helpful
-})
+@Table(name = "translations")
 @Getter
 @Setter
 @NoArgsConstructor

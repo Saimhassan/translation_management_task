@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "translation_locales")
+@Table(name = "translation_locales", indexes = {
+        @Index(name = "idx_locale_code", columnList = "code")
+})
 @Getter
 @Setter
 @NoArgsConstructor

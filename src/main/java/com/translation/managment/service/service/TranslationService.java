@@ -110,7 +110,7 @@ public class TranslationService {
         Optional<TranslationEntity> byId = translationRepository.findById(id);
         return byId.map(translationMapper::toDto);
     }
-
+//
 //    public List<TranslationDTO> findAll(int page, int size) {
 //        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 //        Page<TranslationEntity> translationPage = translationRepository.findAll(pageable);
@@ -123,17 +123,18 @@ public class TranslationService {
         return page.map(entity -> translationMapper.toDto(entity));
     }
 
+
     public List<TranslationDTO> searchTranslations(String key, String content, String tag) {
         List<TranslationEntity> entities = translationRepository.searchByParams(key, content, tag);
         return translationMapper.toDtoList(entities);
     }
 
     @Transactional(readOnly = true)
-    public void exportAllTranslations(OutputStream out, ObjectMapper objectMapper) throws IOException {
+    public void exportAllTranslations(OutputStream out, ObjectMapper objectMapper,String code) throws IOException {
         JsonGenerator generator = objectMapper.getFactory().createGenerator(out);
         generator.writeStartArray();
 
-        try (Stream<TranslationEntity> stream = translationRepository.streamAll()) {
+        try (Stream<TranslationEntity> stream = translationRepository.streamByLocaleCode(code)) {
             stream.forEach(entity -> {
                 try {
                     TranslationDTO dto = translationMapper.toDto(entity);

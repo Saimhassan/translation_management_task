@@ -107,16 +107,15 @@ public class TranslationController {
 
     @Operation(summary = "Export all translations as JSON file")
     @GetMapping(value = "/export", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void exportTranslations(HttpServletResponse response) throws IOException {
+    public void exportTranslations(HttpServletResponse response, @RequestParam("localeCode") String localeCode) throws IOException {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=translations.json");
         response.setHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
 
-        // Flush headers and begin streaming immediately
         response.flushBuffer();
 
         try (ServletOutputStream out = response.getOutputStream()) {
-            service.exportAllTranslations(out, objectMapper);
+            service.exportAllTranslations(out, objectMapper,localeCode);
         }
     }
 
